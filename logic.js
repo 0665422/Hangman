@@ -1,7 +1,53 @@
 // GLABAL VARIABLES
 //-------------------------------------------------------------------------------------
 // Array of word options (all lowercase)
-var wordsList = ["mira", "alibi", "dokkaebi"];
+var wordsList = 
+["kapkan", 
+"tachanka", 
+"glaz", 
+"fuze", 
+"iq", 
+"blitz", 
+"bandit", 
+"jager", 
+"rook", 
+"doc", 
+"twitch", 
+"montagne", 
+"thermite", 
+"pulse", 
+"castle", 
+"ash", 
+"thatcher", 
+"smoke", 
+"sledge", 
+"mute", 
+"frost", 
+"buck", 
+"valkyrie", 
+"blackbeard", 
+"capitao", 
+"caveira", 
+"echo", 
+"hibana", 
+"jackal", 
+"mira", 
+"lesion", 
+"ying", 
+"ela", 
+"zofia", 
+"dokkaebi", 
+"vigil", 
+"finka", 
+"lion", 
+"alibi", 
+"maestro", 
+"maverick", 
+"clash", 
+"kaid", 
+"nomad", 
+"gridlock", 
+"mozzie"];
 
 // Solution will be held here
 var chosenWord = "";
@@ -35,6 +81,10 @@ function startGame() {
     // Resets guesses to specified number
     numGuesses = 9;
 
+    document.getElementById("loss-counter").innerHTML = lossCounter;
+    document.getElementById("guesses-left").innerHTML = numGuesses;
+    document.getElementById("win-counter").innerHTML = winCounter;
+
     // Soultion is chosen randomly from wordList
     chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)];
 
@@ -66,7 +116,7 @@ function startGame() {
     document.getElementById("guesses-left").innerHTML = numGuesses;
 
     // Print the blanks at the beginng of each round in the HTML
-    document.getElementById.("word-blanks").innerHTML = blanksAndSuccesses.join(' ');
+    document.getElementById("word-blanks").innerHTML = blanksAndSuccesses.join(' ');
 
     // Clears the wrong guesses from the previous round
     document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(' ');
@@ -144,5 +194,24 @@ function roundComplete() {
 
         //Restart the game
         startGame();
+
     }
+}
+
+// MAIN PROCESS (Controls actual code running)
+//-------------------------------------------------------------------------------------
+
+// Starts Game
+startGame();
+
+// Captures keys pressed
+document.onkeyup = function(event) {
+    // converts all key klicks to lowercase
+    var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+
+    // runs code to check correctness
+    checkLetters(letterGuessed);
+
+    // runs code after each round
+    roundComplete();
 }
