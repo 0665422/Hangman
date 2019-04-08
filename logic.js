@@ -103,6 +103,10 @@ function startGame() {
     // CRITICAL LINE - Here we reset the wrong guesses from the previous round
     wrongGuesses = [];
 
+    document.getElementById("op-name").innerHTML = "";
+    document.getElementById("result").style.backgroundColor = "";
+    document.getElementsByTagName("IMG")[0].removeAttribute("src");
+
     /* Fill up the blanksAndSuccesses list with appropriate number of blanks,
         which is based on number of letters in the solution. */
     for (var i = 0; i < numBlanks; i++) {
@@ -126,75 +130,78 @@ function startGame() {
 function checkLetters(letter) {
     // This boolean will be toggled based on whether or not a user letter is found
     var letterInWord = false;
-
-    // Checks if a letter exists inside the array at all
-    for (var i = 0; i < numBlanks; i++) {
-        if (chosenWord[i] === letter) {
-            letterInWord = true;
-        }
-    }
-
-    // If the letter exists somewhere in the word, then figure out exactly where (which index?)
-    if (letterInWord) {
-        // Loop through the word
-        for (var x = 0; x < numBlanks; x++) {
-            // Populate the blancksAndSucesses with every instance of the letter
-            if (chosenWord[x] === letter) {
-                // Here we set the specific space in blanks and letters equal to the letter when it matches
-                blanksAndSuccesses[x] = letter;
+    if (numGuesses > -1) {
+        // Checks if a letter exists inside the array at all
+        for (var i = 0; i < numBlanks; i++) {
+            if (chosenWord[i] === letter) {
+                letterInWord = true;
             }
         }
 
-        console.log(blanksAndSuccesses);
-    }
+        // If the letter exists somewhere in the word, then figure out exactly where (which index?)
+        if (letterInWord) {
+            // Loop through the word
+            for (var x = 0; x < numBlanks; x++) {
+                // Populate the blancksAndSucesses with every instance of the letter
+                if (chosenWord[x] === letter) {
+                    // Here we set the specific space in blanks and letters equal to the letter when it matches
+                    blanksAndSuccesses[x] = letter;
+                }
+            }
 
-    // If the letter doesn't exist at all...
-    else {
-        // ...then we add the letter to the list of wrong letters, and we subtract one of the guesses
-        wrongGuesses.push(letter);
-        numGuesses--;
+            console.log(blanksAndSuccesses);
+        }
+
+        // If the letter doesn't exist at all...
+        else {
+            // ...then we add the letter to the list of wrong letters, and we subtract one of the guesses
+            wrongGuesses.push(letter);
+            numGuesses--;
+        }
     }
 }
 
 // Here we will have all of the code that needs to be run after each guess is made
 function roundComplete() {
-    // First, log initial status update in the console telling us how many wins, losses, and guesses left
-    console.log(`Win counter: ${winCounter} | Loss counter: ${lossCounter} | Guesses: ${numGuesses}`);
+    if (numGuesses > -1) {
+        // First, log initial status update in the console telling us how many wins, losses, and guesses left
+        console.log(`Win counter: ${winCounter} | Loss counter: ${lossCounter} | Guesses: ${numGuesses}`);
 
-    // Update the HTML to reflect the number of guesses. Also update the correct guess.
-    document.getElementById("guesses-left").innerHTML = numGuesses;
+        // Update the HTML to reflect the number of guesses. Also update the correct guess.
+        document.getElementById("guesses-left").innerHTML = numGuesses;
 
-    // This will print the array of guesses and blanks onto the page
-    document.getElementById("word-blanks").innerHTML = blanksAndSuccesses.join(" ");
+        // This will print the array of guesses and blanks onto the page
+        document.getElementById("word-blanks").innerHTML = blanksAndSuccesses.join(" ");
 
-    // This will print the wrong guesses onto the page
-    document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
+        // This will print the wrong guesses onto the page
+        document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
 
-    // If you got all letters to match the solution...
-    if (lettersInChosenWord.toString() === blanksAndSuccesses.toString()) {
-        //... add to win counter and give the user an alert
-        winCounter++;
-        alert("You win!");
+        // If you got all letters to match the solution...
+        if (lettersInChosenWord.toString() === blanksAndSuccesses.toString()) {
+            //... add to win counter and give the user an alert
+            winCounter++;
+            document.getElementById("op-name").innerHTML = chosenWord.toUpperCase();
+            document.getElementById("result").style.backgroundColor = "#228B22";
+            document.getElementsByTagName("IMG")[0].setAttribute("src", `ops-pictures/${chosenWord.toLowerCase()}.png`);
+            document.getElementsByTagName("IMG")[0].style.width = "500px";
 
-        // Update the winCounter in the HTML and restart the game
-        document.getElementById("win-counter").innerHTML = winCounter;
-        
-        startGame();
-    }
-    //if we've run out of guesses
-    else if (numGuesses === 0) {
-        //add to the lossCounter
-        lossCounter++;
+            // Update the winCounter in the HTML and restart the game
+            document.getElementById("win-counter").innerHTML = winCounter;
+        }
+        //if we've run out of guesses
+        else if (numGuesses < 1) {
+            //add to the lossCounter
+            lossCounter++;
 
-        // give user an alert
-        alert("You lose");
+            // give user an alert
+            document.getElementById("op-name").innerHTML = chosenWord.toUpperCase();
+            document.getElementById("result").style.backgroundColor = "#B22222";
+            document.getElementsByTagName("IMG")[0].setAttribute("src", `ops-pictures/${chosenWord.toLowerCase()}.png`);
+            document.getElementsByTagName("IMG")[0].style.width = "500px";
 
-        // Update the loss counter in HTML
-        document.getElementById("loss-counter").innerHTML = lossCounter;
-
-        //Restart the game
-        startGame();
-
+            // Update the loss counter in HTML
+            document.getElementById("loss-counter").innerHTML = lossCounter;
+        }
     }
 }
 
@@ -213,5 +220,6 @@ document.onkeyup = function(event) {
     checkLetters(letterGuessed);
 
     // runs code after each round
-    roundComplete();
+    roundComplete();   
+        
 }

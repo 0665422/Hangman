@@ -1,0 +1,33 @@
+@font-face { font-family: Rainbow; src: url('Rainbow.ttf'); }
+
+#result {
+    height: 578px;
+    border-radius: 20px;
+}
+
+.panel-title {
+    font-size: 38px;
+}
+
+.panel-default {
+    font-size: 26px;
+}
+
+#word-blanks {
+    font-size: 38px;
+}
+
+#op-name {
+    font-size: 100px;
+    text-align: center;
+    font-family: Rainbow;
+    color: white;
+}
+
+img {
+    margin: 0 100px;
+}
+
+button {
+    margin: 20px 30px;
+}
